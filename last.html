@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>the message</title>
+    <link rel="icon" href="love-letter.png">
+    <style>
+        /* Unified Color Palette */
+        :root {
+            --mint: #D8E2DC;
+            --sage: #ADC3AE;
+            --peach: #FFE5D9;
+            --pink: #FFCAD4;
+            --sky: #BDE0FE;
+            --rose: #F4ACB7;
+            --lavender: #A98895;
+            --text: #5E6472;
+            --navy: #396885;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body {
+            background-color: #F8F5F9;
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: white;
+            color: var(--navy);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--mint);
+            position: relative;
+        }
+
+        header h1 {
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Music Button */
+        .music-btn {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            cursor: pointer;
+            z-index: 101;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--pink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            background-color: var(--rose);
+            transform: scale(1.1);
+        }
+
+        .music-btn.active {
+            background-color: var(--rose);
+        }
+
+        /* Burger Menu */
+        .burger {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            cursor: pointer;
+            z-index: 101;
+            transition: transform 0.3s;
+        }
+
+        .burger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--navy);
+            margin: 5px;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background: white;
+            padding: 2rem 1.5rem;
+            position: fixed;
+            top: 0;
+            right: -220px;
+            height: 100vh;
+            z-index: 100;
+            transition: right 0.3s ease;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            border-left: 1px solid var(--mint);
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar h2 {
+            color: var(--navy);
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px dashed var(--sky);
+        }
+
+        .sidebar a {
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.6rem 0.8rem;
+            margin: 0.5rem 0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--pink);
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        /* Burger Animation */
+        .burger.active .line1 {
+            transform: rotate(-45deg) translate(-5px, 6px);
+            background-color: var(--rose);
+        }
+
+        .burger.active .line2 {
+            opacity: 0;
+        }
+
+        .burger.active .line3 {
+            transform: rotate(45deg) translate(-5px, -6px);
+            background-color: var(--rose);
+        }
+
+        /* Main Container */
+        .container {
+            flex-grow: 1;
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Message Card */
+        .message-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(189, 224, 254, 0.2);
+            border: 1px solid var(--mint);
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--pink);
+            margin-bottom: 1rem;
+            box-shadow: 0 5px 15px rgba(255, 202, 212, 0.4);
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-subtitle {
+            color: var(--lavender);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .message-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text);
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .signature {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-top: 2rem;
+        }
+
+        .signature-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--sky);
+            margin-left: 1rem;
+        }
+
+        .signature-text {
+            font-style: italic;
+            color: var(--lavender);
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        /* .signature-text {
+            font-style: italic;
+            color: var(--lavender);
+            font-weight: 600;
+        } */
+
+        /* Decorative Elements */
+        .decoration {
+            margin: 1.5rem 0;
+            display: flex;
+            justify-content: center;
+            height: 50px;
+        }
+
+        .flower {
+            font-size: 28px;
+            margin: 0 10px;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .flower:nth-child(1) {
+            color: var(--pink);
+            animation-delay: 0s;
+        }
+
+        .flower:nth-child(2) {
+            color: var(--rose);
+            animation-delay: 0.5s;
+        }
+
+        .flower:nth-child(3) {
+            color: var(--sky);
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(5deg);
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: white;
+            color: var(--navy);
+            font-weight: 700;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            border-top: 1px solid var(--mint);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .message-card {
+                padding: 1.5rem;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .profile-pic {
+                width: 80px;
+                height: 80px;
+            }
+
+            .profile-name {
+                font-size: 1.5rem;
+            }
+
+            .music-btn {
+                left: 1rem;
+                top: 1rem;
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <button class="music-btn" id="musicBtn">♫</button>
+        <h1>the message for you 💌</h1>
+        <div class="burger" id="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <h2>from the heart</h2>
+            <a href="main_gallerypage.html">our memory lane</a>
+            <a href="moments.html">moments in motion</a>
+            <a href="last.html" class="active">for you 💌</a>
+        </div>
+
+        <div class="decoration">
+            <div class="flower">✿</div>
+            <div class="flower">✽</div>
+            <div class="flower">✾</div>
+        </div>
+
+        <!-- Message Card -->
+        <div class="message-card">
+            <div class="profile">
+                <img src="id gaukhar.jpeg" alt="Gaukhar" class="profile-pic">
+                <h2 class="profile-name">Gaukhar</h2>
+                <p class="profile-subtitle">my chosen sister</p>
+            </div>
+
+            <div class="message-text">
+                <p>Жаным Гоха,<br>
+
+                    Я просто хочу сказать, как много ты для меня значишь. Какие бы слова я ни подбирала — ни одно из них
+                    не сможет до конца передать, насколько ты ценна для меня. <br>
+                    Ты стала для меня настоящей сестрой — той, на кого можно положиться, с кем можно говорить обо всём.
+                    Спасибо тебе за твою поддержку, за тёплые разговоры, за каждый момент, проведённый вместе. Все они
+                    очень важны для меня и навсегда останутся в моём сердце. <br>
+
+                    Мне бы хотелось, чтобы таких ценных моментов у нас было ещё больше. Просто гуляя рядом с тобой, я
+                    ощущала настоящее спокойствие и комфорт. <br>
+
+                    Скоро ты заканчиваешь школу и открываешь для себя новый, большой мир. Я от всей души желаю тебе
+                    удачи во всём, и знай — я всегда в тебя верю! <br>
+
+                    Надеюсь, мы не потеряем связь и останемся такими же близкими. <br>
+                    Люблю тебя ♡ <br>
+
+                </p>
+            </div>
+
+            <div class="signature">
+                <span class="signature-text">With all my love,</span>
+                <img src="liki.jpg" alt="Me" class="signature-pic">
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="decoration">
+            <div class="flower">✿</div>
+            <div class="flower">✽</div>
+            <div class="flower">✾</div>
+        </div>
+        made with love for gaukhar ♥︎<br>
+        &copy;yenlik
+    </footer>
+
+    <!-- Audio Element (hidden) -->
+    <audio id="bgMusic" loop>
+        <source src="songs/Clairo - Bags.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // Toggle Sidebar
+        const burger = document.getElementById('burger');
+        const sidebar = document.getElementById('sidebar');
+
+        burger.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            burger.classList.toggle('active');
+        });
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && e.target !== burger && !burger.contains(e.target)) {
+                sidebar.classList.remove('active');
+                burger.classList.remove('active');
+            }
+        });
+
+        // Music Toggle
+        const musicBtn = document.getElementById('musicBtn');
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
+
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.classList.remove('active');
+            } else {
+                bgMusic.play();
+                musicBtn.classList.add('active');
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // Optional: Autoplay with user interaction (to comply with browser policies)
+        document.body.addEventListener('click', function initAudio() {
+            if (!bgMusic.played) {
+                // This will only run once when the user first interacts with the page
+                bgMusic.volume = 0.3; // Set lower volume
+            }
+            document.body.removeEventListener('click', initAudio);
+        }, { once: true });
+    </script>
+</body>
+
+</html>

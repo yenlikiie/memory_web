@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Gallery</title>
+    <link rel="icon" href="camera.png">
+    <style>
+        /* Unified Color Palette */
+        :root {
+            --mint: #D8E2DC;
+            --sage: #ADC3AE;
+            --peach: #FFE5D9;
+            --pink: #FFCAD4;
+            --sky: #BDE0FE;
+            --rose: #F4ACB7;
+            --lavender: #A98895;
+            --text: #5E6472;
+            --navy: #396885;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Nunito', 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body {
+            background-color: #F8F5F9;
+            color: var(--text);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        header {
+            background-color: white;
+            color: var(--navy);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--mint);
+            position: relative;
+        }
+
+        header h1 {
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* Music Button */
+        .music-btn {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            cursor: pointer;
+            z-index: 101;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--pink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .music-btn:hover {
+            background-color: var(--rose);
+            transform: scale(1.1);
+        }
+
+        .music-btn.active {
+            background-color: var(--rose);
+        }
+
+        /* Burger Menu */
+        .burger {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            cursor: pointer;
+            z-index: 101;
+            transition: transform 0.3s;
+        }
+
+        .burger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--navy);
+            margin: 5px;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background: white;
+            padding: 2rem 1.5rem;
+            position: fixed;
+            top: 0;
+            right: -220px;
+            height: 100vh;
+            z-index: 100;
+            transition: right 0.3s ease;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            border-left: 1px solid var(--mint);
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .sidebar h2 {
+            color: var(--navy);
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px dashed var(--sky);
+        }
+
+        .sidebar a {
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.6rem 0.8rem;
+            margin: 0.5rem 0;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .sidebar a:hover {
+            background-color: var(--pink);
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        /* Burger Animation */
+        .burger.active .line1 {
+            transform: rotate(-45deg) translate(-5px, 6px);
+            background-color: var(--rose);
+        }
+
+        .burger.active .line2 {
+            opacity: 0;
+        }
+
+        .burger.active .line3 {
+            transform: rotate(45deg) translate(-5px, -6px);
+            background-color: var(--rose);
+        }
+
+        /* Main Container */
+        .container {
+            flex-grow: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem 0;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(189, 224, 254, 0.25);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            aspect-ratio: 1/1;
+            border: 1px solid var(--mint);
+            position: relative;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(189, 224, 254, 0.35);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .memory-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 0.8rem;
+            text-align: center;
+            font-weight: 700;
+            color: var(--lavender);
+            font-size: 0.9rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 102;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 25px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(189, 224, 254, 0.25);
+            border: 1px solid var(--mint);
+        }
+
+        .modal img {
+            width: 100%;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--mint);
+        }
+
+        .modal p {
+            color: var(--navy);
+            font-weight: 700;
+            text-align: center;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--rose);
+            transition: transform 0.3s;
+            background: white;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 1px solid var(--mint);
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: white;
+            color: var(--navy);
+            font-weight: 700;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            border-top: 1px solid var(--mint);
+        }
+
+        /* Decorative Elements */
+        .decoration {
+            margin: 1.5rem 0;
+            display: flex;
+            justify-content: center;
+            height: 50px;
+        }
+
+        .flower {
+            font-size: 28px;
+            margin: 0 10px;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .flower:nth-child(1) {
+            color: var(--pink);
+            animation-delay: 0s;
+        }
+
+        .flower:nth-child(2) {
+            color: var(--rose);
+            animation-delay: 0.5s;
+        }
+
+        .flower:nth-child(3) {
+            color: var(--sky);
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-15px) rotate(5deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                padding: 0.5rem 0;
+                gap: 1rem;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .music-btn {
+                left: 1rem;
+                top: 1rem;
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+
+            .burger {
+                right: 1rem;
+                top: 1rem;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <button class="music-btn" id="musicBtn">♫</button>
+        <h1>our memory lane</h1>
+        <p>my favorite photos with you</p>
+        <div class="burger" id="burger">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <h2>from the heart</h2>
+            <a href="main_gallerypage.html" class="active">memory lane</a>
+            <a href="moments.html">moments in motion</a>
+            <a href="last.html">for you 💌</a>
+        </div>
+
+        <div class="decoration">
+            <div class="flower">✿</div>
+            <div class="flower">✽</div>
+            <div class="flower">✾</div>
+        </div>
+
+        <!-- Gallery -->
+        <div class="gallery">
+            <!-- Original 6 Items -->
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo1.jpeg', 'Remember this day? We laughed so much! 🌸')">
+                <img src="photos_web/photo1.jpeg" alt="Memory 1">
+                <div class="memory-label">Bestie Day Out</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('photos_web/photo2.jpeg', 'That sunset was magical! 🌅')">
+                <img src="photos_web/photo2.jpeg" alt="Memory 2">
+                <div class="memory-label">Golden Hour</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo3.jpeg', 'Coffee dates with you are my favorite ☕')">
+                <img src="photos_web/photo3.jpeg" alt="Memory 3">
+                <div class="memory-label">Coffee Time</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('photos_web/photo4.jpeg', 'Best beach day ever! 🏖️')">
+                <img src="photos_web/photo4.jpeg" alt="Memory 4">
+                <div class="memory-label">Beach Day</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('photos_web/photo5.jpg', 'We know how to have fun! 🎉')">
+                <img src="photos_web/photo5.jpg" alt="Memory 5">
+                <div class="memory-label">Party Night</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo6.jpg', 'Our adventure was unforgettable ✈️')">
+                <img src="photos_web/photo6.jpg" alt="Memory 6">
+                <div class="memory-label">Adventure Time</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('photos_web/photo7.jpg', 'Your smile made my day! 🎂')">
+                <img src="photos_web/photo7.jpg" alt="Memory 7">
+                <div class="memory-label">Birthday Celebration</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('photos_web/photo8.jpg', 'Snow angels and hot chocolate ❄️')">
+                <img src="photos_web/photo8.jpg" alt="Memory 8">
+                <div class="memory-label">Winter Wonderland</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo9.jpg', 'The music was great but your company was better! 🎵')">
+                <img src="photos_web/photo9.jpg" alt="Memory 9">
+                <div class="memory-label">Concert Night</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo10.jpeg', 'We conquered that mountain together! ⛰️')">
+                <img src="photos_web/photo10.jpeg" alt="Memory 10">
+                <div class="memory-label">Mountain Trek</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo11.jpg', 'Your cooking is always amazing! 🍽️')">
+                <img src="photos_web/photo11.jpg" alt="Memory 11">
+                <div class="memory-label">Dinner Date</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('photos_web/photo12.jpg', 'So much art, so little time 🎨')">
+                <img src="photos_web/photo12.jpg" alt="Memory 12">
+                <div class="memory-label">Museum Day</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo13.jpeg', 'Simple days are the best days 🌳')">
+                <img src="photos_web/photo13.jpeg" alt="Memory 13">
+                <div class="memory-label">Park Picnic</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo14.jpeg', 'Dancing in the rain like no ones watching ☔')">
+                <img src="photos_web/photo14.jpeg" alt="Memory 14">
+                <div class="memory-label">Rainy Day Fun</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('photos_web/photo15.jpg', 'Late nights and shared notes 📚')">
+                <img src="photos_web/photo15.jpg" alt="Memory 15">
+                <div class="memory-label">Study Buddies</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('photos_web/photo16.jpeg', 'Windows down, music up! 🚗')">
+                <img src="photos_web/photo16.jpeg" alt="Memory 16">
+                <div class="memory-label">Road Trip</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo17.jpg', 'Colors, music, and endless joy! 🎪')">
+                <img src="photos_web/photo17.jpg" alt="Memory 17">
+                <div class="memory-label">Festival Fun</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('photos_web/photo18.jpg', 'Building snowmen like kids ⛄')">
+                <img src="photos_web/photo18.jpg" alt="Memory 18">
+                <div class="memory-label">Snow Day</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('photos_web/photo19.jpg', 'Mimosas and endless talks 🥂')">
+                <img src="photos_web/photo19.jpg" alt="Memory 19">
+                <div class="memory-label">Sunday Brunch</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo20.jpg', 'Your commentary is better than the film! 🎬')">
+                <img src="photos_web/photo20.jpg" alt="Memory 20">
+                <div class="memory-label">Movie Night</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo21.jpg', 'Flour fights and sweet results 🧁')">
+                <img src="photos_web/photo21.jpg" alt="Memory 21">
+                <div class="memory-label">Baking Day</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo22.jpg', 'Stars, stories, and marshmallows 🔥')">
+                <img src="photos_web/photo22.jpg" alt="Memory 22">
+                <div class="memory-label">Camping Trip</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo23.JPG', 'Getting lost in books together 📖')">
+                <img src="photos_web/photo23.JPG" alt="Memory 23">
+                <div class="memory-label">Bookstore Date</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('photos_web/photo24.jpg', 'You always cheer the loudest! ⚽')">
+                <img src="photos_web/photo24.jpg" alt="Memory 24">
+                <div class="memory-label">Game Day</div>
+            </div>
+            <div class="gallery-item" onclick="openModal('photos_web/photo25.jpg', 'You make ordinary days bloom 🌷')">
+                <img src="photos_web/photo25.jpg" alt="Memory 25">
+                <div class="memory-label">Garden Walk</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo26.JPG', 'Getting lost in the city lights 🌃')">
+                <img src="photos_web/photo26.JPG" alt="Memory 26">
+                <div class="memory-label">City Adventure</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo27.jpeg', 'Furry friends make everything better 🐶')">
+                <img src="photos_web/photo27.jpeg" alt="Memory 27">
+                <div class="memory-label">Puppy Playdate</div>
+            </div>
+            <div class="gallery-item"
+                onclick="openModal('photos_web/photo28.jpeg', 'Waking up early was worth it! 🌄')">
+                <img src="photos_web/photo28.jpeg" alt="Memory 28">
+                <div class="memory-label">Sunrise Moment</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <img id="modal-img" src="" alt="">
+            <p id="modal-text"></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="decoration">
+            <div class="flower">✿</div>
+            <div class="flower">✽</div>
+            <div class="flower">✾</div>
+        </div>
+        made with love for gaukhar ♥︎<br>
+        &copy;yenlik
+    </footer>
+
+    <!-- Audio Element (hidden) -->
+    <audio id="bgMusic" loop>
+        <source src="songs/Billie Eilish - BIRDS OF A FEATHER.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // Toggle Sidebar
+        const burger = document.getElementById('burger');
+        const sidebar = document.getElementById('sidebar');
+
+        burger.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            burger.classList.toggle('active');
+        });
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && e.target !== burger && !burger.contains(e.target)) {
+                sidebar.classList.remove('active');
+                burger.classList.remove('active');
+            }
+        });
+
+        // Modal Functions
+        function openModal(imgSrc, text) {
+            document.getElementById('modal-img').src = imgSrc;
+            document.getElementById('modal-text').innerText = text;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            if (event.target === document.getElementById('modal')) {
+                closeModal();
+            }
+        }
+
+        // Music Toggle
+        const musicBtn = document.getElementById('musicBtn');
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
+
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.classList.remove('active');
+            } else {
+                bgMusic.play();
+                musicBtn.classList.add('active');
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // Optional: Autoplay with user interaction (to comply with browser policies)
+        document.body.addEventListener('click', function initAudio() {
+            if (!bgMusic.played) {
+                // This will only run once when the user first interacts with the page
+                bgMusic.volume = 0.3; // Set lower volume
+            }
+            document.body.removeEventListener('click', initAudio);
+        }, { once: true });
+    </script>
+</body>
+
+</html>

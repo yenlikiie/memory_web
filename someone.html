@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Denied</title>
+    <style>
+        body {
+            font-family: 'Nunito', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #F8F5F9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #5E6472;
+            text-align: center;
+        }
+
+        .message {
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(189, 224, 254, 0.3);
+            padding: 45px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid #D8E2DC;
+            font-size: 18px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: #D8E2DC;
+        }
+
+        .emoji {
+            font-size: 50px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .decoration {
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #D8E2DC;
+        }
+
+        @media (max-width: 500px) {
+            .message {
+                padding: 30px 20px;
+                font-size: 16px;
+            }
+
+            .emoji {
+                font-size: 40px;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="message">
+        <span class="emoji">🔒</span>
+        You don't have access to this memory web.<br>
+        It's exclusively for Gaukhar and Yenlik.
+
+        <div class="decoration">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+</body>
+
+</html>
