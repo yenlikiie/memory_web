@@ -8,7 +8,6 @@
     <link rel="icon" href="video.png">
 
     <style>
-        /* Unified Color Palette */
         :root {
             --mint: #D8E2DC;
             --sage: #ADC3AE;
@@ -21,7 +20,6 @@
             --navy: #396885;
         }
 
-        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
@@ -55,7 +53,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Burger Menu */
         .burger {
             position: absolute;
             top: 1.5rem;
@@ -73,8 +70,7 @@
             transition: all 0.3s ease;
             border-radius: 3px;
         }
-
-        /* Sidebar */
+        
         .sidebar {
             width: 220px;
             background: white;
@@ -134,7 +130,6 @@
             background-color: var(--rose);
         }
 
-        /* Main Container */
         .container {
             flex-grow: 1;
             padding: 2rem;
@@ -143,7 +138,6 @@
             width: 100%;
         }
 
-        /* Video Gallery */
         .video-gallery {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -187,20 +181,6 @@
             font-size: 0.9rem;
         }
 
-        /* Modal */
-        /* .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 102;
-            justify-content: center;
-            align-items: center;
-        } */
-
         .modal {
             display: none;
             position: fixed;
@@ -214,18 +194,6 @@
             align-items: center;
             text-align: center;
         }
-
-
-        /* .modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 25px;
-            max-width: 800px;
-            width: 90%;
-            position: relative;
-            box-shadow: 0 15px 35px rgba(189, 224, 254, 0.25);
-            border: 1px solid var(--mint);
-        } */
 
         .modal-content {
             background: white;
@@ -241,13 +209,6 @@
             padding-top: 2.5rem;
         }
 
-
-        /* .modal video {
-            width: 100%;
-            border-radius: 15px;
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--mint);
-        } */
         .modal video {
             max-width: 100%;
             max-height: 70vh;
@@ -272,24 +233,6 @@
             line-height: 1.7;
         }
 
-        /* .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.8rem;
-            cursor: pointer;
-            color: var(--rose);
-            transition: transform 0.3s;
-            background: white;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            border: 1px solid var(--mint);
-        } */
-
         .close-btn {
             position: absolute;
             top: 1rem;
@@ -313,8 +256,7 @@
         .close-btn:hover {
             transform: rotate(90deg);
         }
-
-        /* Footer */
+        
         footer {
             text-align: center;
             padding: 1.5rem;
@@ -325,7 +267,6 @@
             border-top: 1px solid var(--mint);
         }
 
-        /* Decorative Elements */
         .decoration {
             margin: 1.5rem 0;
             display: flex;
@@ -367,7 +308,6 @@
             }
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .video-gallery {
                 grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -388,7 +328,6 @@
 </head>
 
 <body>
-    <!-- Header -->
     <header>
         <h1>our moments in motion</h1>
         <p>memory reel</p>
@@ -571,16 +510,6 @@
         </div>
     </div>
 
-    <!-- Video Modal -->
-    <!-- <div class="modal" id="videoModal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeVideoModal()">&times;</span>
-            <video id="modal-video" controls autoplay>
-                <source src="" type="video/mp4">
-            </video>
-            <p id="video-modal-text"></p>
-        </div>
-    </div> -->
 
     <div class="modal" id="videoModal">
         <div class="modal-content">
@@ -621,15 +550,6 @@
                 burger.classList.remove('active');
             }
         });
-
-        // Video Modal Functions
-        // function openVideoModal(videoSrc, text) {
-        //     const modalVideo = document.getElementById('modal-video');
-        //     modalVideo.src = videoSrc;
-        //     document.getElementById('video-modal-text').innerText = text;
-        //     document.getElementById('videoModal').style.display = 'flex';
-        //     modalVideo.play();
-        // }
 
         function openVideoModal(videoSrc, text) {
             const modal = document.getElementById('videoModal');
@@ -688,9 +608,13 @@
                 const videos = {
                     'video1': { src: 'videos/video1.mp4', text: 'That time we couldn\'t stop laughing! 😂' },
                     'video2': { src: 'videos/video2.MOV', text: 'Our amazing adventure! 🌄' },
-                    'video3': { src: 'videos/video3.mp4', text: 'Best birthday surprise ever! 🎂' },
-                    // Добавьте остальные видео по аналогии
-                    'video21': { src: 'videos/video21.MOV', text: 'Watching fireworks! 🎆' }
+                    'video4': { src: 'videos/video4.MOV', text: 'Dancing like nobody\'s watching! 💃' },
+                    'video5': { src: 'videos/video5.MOV', text: 'That sunset was magical! 🌅' },
+                    'video9': { src: 'videos/video9.MOV', text: 'Our first road trip together! 🚗' },
+                    'video12': { src: 'videos/video12.MOV', text: 'Singing our hearts out! 🎤' },
+                    'video15': { src: 'videos/video15.MOV', text: 'Midnight snack attack! 🍕' },
+                    'video16': { src: 'videos/video16.MOV', text: 'Festival dancing! 🎪'},
+                    'video18': { src: 'videos/video18.MOV', text: 'Board game rivalry! ♟️' }
                 };
 
                 if (videos[videoId]) {
